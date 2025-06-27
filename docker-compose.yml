@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  oracle10g-xe:
+    container_name: oracle10g-xe
+    build:
+      context: . # Asume que el Dockerfile está en el mismo directorio
+      dockerfile: Dockerfile
+    ports:
+      - "1521:1521"   # Oracle DB listener
+      - "8080:8080"   # Oracle APEX
+      - "2222:22"     # SSH
+    environment:
+      - ORACLE_HOME=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server
+      - LD_LIBRARY_PATH=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server/lib
+      - PATH=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin:$PATH
+      - ORACLE_SID=XE
+      - TZ=Asia/Shanghai
+    volumes:
+      - oracle10g-data:/u01/app/oracle
+    restart: unless-stopped
+
+volumes:
+  oracle10g-data:
